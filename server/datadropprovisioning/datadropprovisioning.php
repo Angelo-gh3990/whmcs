@@ -164,6 +164,19 @@ function datadropprovisioning_UnsuspendAccount(array $params) {
 }
 
 /**
+ * Add custom buttons to the client area.
+ *
+ * @param array $params
+ * @return array
+ *
+function datadropprovisioning_ClientAreaCustomButtonArray(array $params) {
+    return [
+        "Login to DataDrop" => "https://sync.decentrally.cloud"
+    ];
+}
+**/
+
+/**
  * Client area output.
  *
  * @param array $params
@@ -171,7 +184,7 @@ function datadropprovisioning_UnsuspendAccount(array $params) {
  */
 function datadropprovisioning_ClientArea(array $params) {
     // Provide output for the client area
-    return '<p>This is a custom client area output.</p>';
+    return '<p><a href="https://sync.decentrally.cloud" target="_blank">Login to DataDrop</a></p>';
 }
 
 ?>

@@ -36,14 +36,39 @@ function datadropprovisioning_Log($message) {
 }
 
 /**
+ * Retrieve the value of a custom product field by name.
+ *
+ * @param array $params
+ * @param string $fieldName
+ * @return string|null
+ */
+function logAllCustomFields(array $params) {
+    $customFieldsData = [];
+    foreach ($params['customfields'] as $customfield) {
+        $customFieldsData[] = json_encode($customfield);
+        datadropprovisioning_Log('Google or Github Account DataDrop custom field data: ' . json_encode($customfield));
+    }
+    return $customFieldsData;
+}
+
+/**
  * Create a new service.
  *
  * @param array $params
  * @return string "success" or error message
  */
 function datadropprovisioning_CreateAccount(array $params) {
-    $email = $params['clientsdetails']['email'];
-    $apiUrl = 'https://' . $params['serverhostname'] . '/xx/xxx/xxxxxx-xxxxx-xxxx-xxxx';
+//    logAllCustomFields($params);
+    $customFieldsData = logAllCustomFields($params);
+
+    $customEmail = $customFieldsData[0];
+    $customEmail = trim($customEmail, '"'); // Remove surrounding double quotes
+
+    datadropprovisioning_Log('CreateAccount: Custom field value retrieved: ' . $customEmail);
+
+    $email = $customEmail;
+//    $email = $params['clientsdetails']['email'];
+    $apiUrl = 'https://' . $params['serverhostname'] . '/v1/api/create-datadrop-user-4539';
     $username = $params['serverusername'];
     $password = $params['serverpassword'];
 
@@ -95,8 +120,15 @@ function datadropprovisioning_CreateAccount(array $params) {
  * @return string "success" or error message
  */
 function datadropprovisioning_TerminateAccount(array $params) {
-    $email = $params['clientsdetails']['email'];
-    $apiUrl = 'https://' . $params['serverhostname'] . '/xx/xxx/xxxxxx-xxxxx-xxxx-xxxx';
+    $customFieldsData = logAllCustomFields($params);
+
+    $customEmail = $customFieldsData[0];
+    $customEmail = trim($customEmail, '"'); // Remove surrounding double quotes
+
+    datadropprovisioning_Log('TerminateAccount: Custom field value retrieved: ' . $customEmail);
+
+    $email = $customEmail;
+    $apiUrl = 'https://' . $params['serverhostname'] . '/v1/api/delete-datadrop-user-6539';
     $username = $params['serverusername'];
     $password = $params['serverpassword'];
 
@@ -169,11 +201,11 @@ function datadropprovisioning_UnsuspendAccount(array $params) {
  * @param array $params
  * @return array
  *
-function datadropprovisioning_ClientAreaCustomButtonArray(array $params) {
-    return [
-        "Login to DataDrop" => "https://sync.decentrally.cloud"
-    ];
-}
+ * function datadropprovisioning_ClientAreaCustomButtonArray(array $params) {
+ *     return [
+ *         "Login to DataDrop" => "https://sync.decentrally.cloud"
+ *     ];
+ * }
 **/
 
 /**
